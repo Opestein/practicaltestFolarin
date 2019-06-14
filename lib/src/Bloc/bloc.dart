@@ -1,12 +1,10 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:wakanowpracticaltest/src/Model/searchFlightModel.dart';
 import 'package:wakanowpracticaltest/src/Repositories/repo.dart';
 
 class SearchFlightBloc {
   SearchRepo searchRepo = SearchRepo();
 
-  BehaviorSubject<SearchFlightModel> _subject =
-      BehaviorSubject<SearchFlightModel>();
+  BehaviorSubject _subject = BehaviorSubject();
 
   SearchFlightBloc(this.searchRepo) {
 //    searchNow();
@@ -34,7 +32,7 @@ class SearchFlightBloc {
         max));
   }
 
-  BehaviorSubject<SearchFlightModel> get subject => _subject;
+  BehaviorSubject get subject => _subject;
 
   void dispose() {
     _subject.close();

@@ -83,11 +83,12 @@ class ResultScreenState extends State<ResultScreen>
 
     return Scaffold(
       appBar: appBar,
-      body: StreamBuilder<SearchFlightModel>(
+      body: StreamBuilder(
           stream: searchFlightBloc.subject.stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              SearchFlightModel data = snapshot.data;
+              SearchFlightModel data =
+                  SearchFlightModel.fromJson(snapshot.data);
               return ListView(
                 children: <Widget>[
                   Column(
@@ -134,11 +135,12 @@ class ResultScreenState extends State<ResultScreen>
                                 .searchFlightModelDataFlightSegment
                                 .carrierCode;
 
-                            final response = data.toString();
+                            final response = snapshot.data;
 
-//                            json.decode(responseSearch.body);
+//
 
-                            print(data.toString());
+                            var carrierName = response['dictionaries']
+                                ['carriers'][carrierCode];
 
                             return SlideTransition(
                                 position: offset,
@@ -174,11 +176,12 @@ class ResultScreenState extends State<ResultScreen>
                                                           context, 0),
                                                       bottom: safeAreaHeight(
                                                           context, 0)),
-                                                  child: Text(
-                                                    carrierCode,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.blue),
+                                                  child: Image.asset(
+                                                    Assets.loading,
+                                                    width: safeAreaWidth(
+                                                        context, 6.5),
+                                                    height: safeAreaWidth(
+                                                        context, 6.5),
                                                   ),
                                                 ),
                                                 Padding(
@@ -209,8 +212,9 @@ class ResultScreenState extends State<ResultScreen>
                                                             .searchFlightModelDataFlightSegmentDeparture
                                                             .at,
                                                         style: TextStyle(
-                                                            fontSize: 12,
+                                                            fontSize: 11,
                                                             color: Colors.blue),
+                                                        softWrap: true,
                                                       ),
                                                       Text(
                                                         data.searchFlightModelData
@@ -227,6 +231,7 @@ class ResultScreenState extends State<ResultScreen>
                                                         style: TextStyle(
                                                           fontSize: 11,
                                                         ),
+                                                        softWrap: true,
                                                       ),
                                                     ],
                                                   ),
@@ -260,8 +265,9 @@ class ResultScreenState extends State<ResultScreen>
                                                             .searchFlightModelDataFlightSegmentArrival
                                                             .at,
                                                         style: TextStyle(
-                                                            fontSize: 12,
+                                                            fontSize: 11,
                                                             color: Colors.blue),
+                                                        softWrap: true,
                                                       ),
                                                       Text(
                                                         data.searchFlightModelData
@@ -279,6 +285,7 @@ class ResultScreenState extends State<ResultScreen>
                                                           color: themeColor,
                                                           fontSize: 10,
                                                         ),
+                                                        softWrap: true,
                                                       ),
                                                     ],
                                                   ),
@@ -304,7 +311,7 @@ class ResultScreenState extends State<ResultScreen>
                                                       bottom: safeAreaHeight(
                                                           context, 0)),
                                                   child: Image.asset(
-                                                    Assets.loading,
+                                                    Assets.pss,
                                                     width: safeAreaWidth(
                                                         context, 6.5),
                                                     height: safeAreaWidth(
@@ -361,7 +368,7 @@ class ResultScreenState extends State<ResultScreen>
                                                   safeAreaHeight(context, 1),
                                             ),
                                             Text(
-                                              "+7 Egyptair flight(s)",
+                                              carrierName,
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.blue,

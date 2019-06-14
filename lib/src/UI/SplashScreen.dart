@@ -150,6 +150,7 @@ class SplashScreenState extends State<SplashScreen>
       isSignedIn();
     } else {
       preferences.setBool("firstLaunch", true);
+      isSignedIn();
 //      Navigator.pushReplacement(context,
 //          CupertinoPageRoute(builder: (context) => OnboardingScreen()));
     }

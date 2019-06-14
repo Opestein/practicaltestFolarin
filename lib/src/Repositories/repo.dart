@@ -1,6 +1,5 @@
 import 'package:wakanowpracticaltest/src/LocalUtils/databaseHelper.dart';
 import 'package:wakanowpracticaltest/src/LocalUtils/model.dart';
-import 'package:wakanowpracticaltest/src/Model/searchFlightModel.dart';
 import 'package:wakanowpracticaltest/src/ServerUtils/ApiClient.dart';
 
 class DatabaseRepo {
@@ -30,7 +29,7 @@ class DatabaseRepo {
 class SearchRepo {
   ApiClient apiClient = ApiClient();
 
-  Future<SearchFlightModel> searchFlight(
+  Future searchFlight(
       context,
       String origin,
       String destination,
@@ -40,7 +39,7 @@ class SearchRepo {
       String nonStop,
       String currency,
       String max) async {
-    SearchFlightModel searchFlightModel = await apiClient.searchFlightAPI(
+    var responseSearchJson = await apiClient.searchFlightAPI(
         context,
         origin,
         destination,
@@ -50,6 +49,6 @@ class SearchRepo {
         nonStop,
         currency,
         max);
-    return searchFlightModel;
+    return responseSearchJson;
   }
 }

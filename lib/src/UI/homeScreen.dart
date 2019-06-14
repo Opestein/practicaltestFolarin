@@ -55,6 +55,8 @@ class HomeScreenState extends State<HomeScreen>
   String currency = "ngn";
   String max = "50";
 
+  bool isLoading = false;
+
   @override
   void initState() {
     blocRunner();
@@ -218,7 +220,7 @@ class HomeScreenState extends State<HomeScreen>
                                         style: TextStyle(fontSize: 11),
                                       ),
                                       Text(
-                                        "Lagos - Murtala",
+                                        origin,
                                         style: TextStyle(color: Colors.blue),
                                       ),
                                     ],
@@ -255,7 +257,7 @@ class HomeScreenState extends State<HomeScreen>
                                         style: TextStyle(fontSize: 11),
                                       ),
                                       Text(
-                                        "Dubai - Dubai International",
+                                        destination,
                                         style: TextStyle(color: Colors.blue),
                                       ),
                                     ],
@@ -384,7 +386,7 @@ class HomeScreenState extends State<HomeScreen>
                                     style: TextStyle(fontSize: 11),
                                   ),
                                   Text(
-                                    "Economy",
+                                    travelClass,
                                     style: TextStyle(color: Colors.blue),
                                   ),
                                 ],
@@ -416,11 +418,11 @@ class HomeScreenState extends State<HomeScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "PASSENGERS",
+                                    passengers,
                                     style: TextStyle(fontSize: 11),
                                   ),
                                   Text(
-                                    "1 Adult",
+                                    adults,
                                     style: TextStyle(color: Colors.blue),
                                   ),
                                 ],
@@ -449,8 +451,18 @@ class HomeScreenState extends State<HomeScreen>
 //            Navigator.push(context,
 //                CupertinoPageRoute(builder: (context) => ResultScreen()));
 
-            searchFlightBloc.searchNow(context, origin, destination,
-                departureDate, adults, travelClass, nonStop, currency, max);
+            setState(() {
+              isLoading = true;
+            });
+
+            searchFlightBloc
+                .searchNow(context, origin, destination, departureDate, adults,
+                    travelClass, nonStop, currency, max)
+                .then((result) {
+              setState(() {
+                isLoading = false;
+              });
+            });
           },
           height: 60.0,
           child: Text('Search Flights',
@@ -468,14 +480,43 @@ class HomeScreenState extends State<HomeScreen>
         padding: EdgeInsets.symmetric(horizontal: safeAreaWidth(context, 3)),
         decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage(Assets.homebg))),
-        child: Column(
+        child: Stack(
           children: <Widget>[
-            SizedBox(height: safeAreaHeight(context, 5)),
-            customAppBar,
-            SizedBox(height: safeAreaHeight(context, 2)),
-            detailCard,
-            SizedBox(height: safeAreaHeight(context, 1)),
-            searchButton
+            Column(
+              children: <Widget>[
+                SizedBox(height: safeAreaHeight(context, 5)),
+                customAppBar,
+                SizedBox(height: safeAreaHeight(context, 2)),
+                detailCard,
+                SizedBox(height: safeAreaHeight(context, 1)),
+                searchButton
+              ],
+            ),
+            Positioned(
+              child: isLoading
+                  ? Container(
+                      color: Colors.grey.withOpacity(0.5),
+                      child: Center(
+                          child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+//                        color: Colors.white.withOpacity(0.8),
+
+                        height: responsiveHeight(context, 12),
+                        width: responsiveWidth(context, 35),
+                        child: CupertinoActivityIndicator(
+                            animating: true,
+                            radius: responsiveWidth(context, 4)),
+                      )
+//                        CircularProgressIndicator(
+//                            valueColor:
+//                                AlwaysStoppedAnimation<Color>(primaryColor)),
+                          ),
+                    )
+                  : Container(),
+            ),
           ],
         ),
       ),

@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:query_params/query_params.dart';
 import 'package:wakanowpracticaltest/src/LocalUtils/model.dart';
 import 'package:wakanowpracticaltest/src/Model/requestTokenModel.dart';
-import 'package:wakanowpracticaltest/src/Model/searchFlightModel.dart';
 import 'package:wakanowpracticaltest/src/Repositories/repo.dart';
 import 'package:wakanowpracticaltest/src/ServerUtils/BaseUrl.dart';
 import 'package:wakanowpracticaltest/src/UI/resultScreen.dart';
@@ -16,7 +15,7 @@ import 'package:wakanowpracticaltest/src/Utils/uiFunctions.dart';
 class ApiClient {
   DatabaseRepo databaseRepo = DatabaseRepo();
 
-  Future<SearchFlightModel> searchFlightAPI(
+  Future searchFlightAPI(
       context,
       String origin,
       String destination,
@@ -100,7 +99,8 @@ class ApiClient {
         Navigator.push(
             context, CupertinoPageRoute(builder: (context) => ResultScreen()));
 
-        return SearchFlightModel.fromJson(responseSearchJson);
+        return responseSearchJson;
+//        return SearchFlightModel.fromJson(responseSearchJson);
       }
     } else {
       modalBottomSheet(context, "An error occured", false);
